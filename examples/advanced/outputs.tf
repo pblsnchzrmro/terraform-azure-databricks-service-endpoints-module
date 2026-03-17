@@ -4,32 +4,32 @@
 
 output "databricks_workspace_id" {
   description = "ID of the Databricks workspace"
-  value       = azurerm_databricks_workspace.workspace.workspace_id
+  value       = module.databricks_workspace.databricks_workspace_id
 }
 
 output "databricks_workspace_url" {
   description = "URL of the Databricks workspace"
-  value       = "https://${azurerm_databricks_workspace.workspace.workspace_url}/"
+  value       = module.databricks_workspace.databricks_workspace_url
 }
 
 output "external_location_name" {
-  description = "Name of the Databricks external location"
-  value       = databricks_external_location.external_location.name
+  description = "Name of the external location"
+  value       = module.databricks_workspace.external_location_name
 }
 
 output "external_location_url" {
-  description = "URL of the Databricks external location"
-  value       = databricks_external_location.external_location.url
+  description = "URL of the external location"
+  value       = module.databricks_workspace.external_location_url
 }
 
 output "metastore_id" {
-  description = "ID of the Databricks metastore"
-  value       = data.databricks_metastore.metastore.id
+  description = "ID of the metastore"
+  value       = module.databricks_workspace.metastore_id
 }
 
 output "storage_credential_name" {
-  description = "Name of the Databricks storage credential"
-  value       = databricks_storage_credential.storage_credential.name
+  description = "Name of the storage credential"
+  value       = module.databricks_workspace.storage_credential_name
 }
 
 # ========================================
@@ -38,22 +38,22 @@ output "storage_credential_name" {
 
 output "ncc_id" {
   description = "ID of the Network Connectivity Configuration"
-  value       = databricks_mws_network_connectivity_config.ncc.network_connectivity_config_id
+  value       = module.databricks_workspace.ncc_id
 }
 
 output "private_subnet_id" {
   description = "ID of the private subnet"
-  value       = azurerm_subnet.private.id
+  value       = module.databricks_workspace.private_subnet_id
 }
 
 output "public_subnet_id" {
   description = "ID of the public subnet"
-  value       = azurerm_subnet.public.id
+  value       = module.databricks_workspace.public_subnet_id
 }
 
 output "vnet_id" {
   description = "ID of the virtual network"
-  value       = azurerm_virtual_network.vnet.id
+  value       = module.databricks_workspace.vnet_id
 }
 
 # ========================================
@@ -62,12 +62,12 @@ output "vnet_id" {
 
 output "resource_group_id" {
   description = "ID of the resource group"
-  value       = azurerm_resource_group.rg.id
+  value       = module.databricks_workspace.resource_group_id
 }
 
 output "resource_group_name" {
   description = "Name of the resource group"
-  value       = azurerm_resource_group.rg.name
+  value       = module.databricks_workspace.resource_group_name
 }
 
 # ========================================
@@ -76,16 +76,15 @@ output "resource_group_name" {
 
 output "storage_account_id" {
   description = "ID of the ADLS storage account"
-  value       = azurerm_storage_account.adls.id
+  value       = module.databricks_workspace.storage_account_id
 }
 
 output "storage_account_name" {
   description = "Name of the ADLS storage account"
-  value       = azurerm_storage_account.adls.name
+  value       = module.databricks_workspace.storage_account_name
 }
 
 output "storage_container_name" {
   description = "Name of the storage container"
-  value       = azurerm_storage_container.data.name
+  value       = module.databricks_workspace.storage_container_name
 }
-

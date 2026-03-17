@@ -1,19 +1,26 @@
+# ========================================
+# Access Connector
+# ========================================
+
 resource "azurerm_databricks_access_connector" "workspace" {
-  name                = "dac-${var.project_name}-workspace"
+  name                = local.workspace_access_connector_name
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.azure_region
+  tags                = var.tags
 
   identity {
     type = "SystemAssigned"
   }
-
-  tags = var.tags
 }
 
+# ========================================
+# Databricks Workspace
+# ========================================
+
 resource "azurerm_databricks_workspace" "workspace" {
-  name                                  = "dbw-${var.project_name}"
+  name                                  = local.databricks_workspace_name
   resource_group_name                   = azurerm_resource_group.rg.name
-  managed_resource_group_name           = "rg-${var.project_name}-databricks-managed"
+  managed_resource_group_name           = local.managed_resource_group_name
   location                              = var.azure_region
   sku                                   = "premium"
   tags                                  = var.tags
@@ -39,14 +46,18 @@ resource "azurerm_databricks_workspace" "workspace" {
   ]
 }
 
-data "databricks_metastore" "metastore" {
-  provider = databricks.accounts
-  name     = var.databricks_metastore
-}
+# ========================================
+# Unity Catalog Metastore Assignment
+# ========================================
 
 resource "databricks_metastore_assignment" "workspace" {
   provider     = databricks.accounts
   metastore_id = data.databricks_metastore.metastore.id
   workspace_id = azurerm_databricks_workspace.workspace.workspace_id
-  depends_on   = [azurerm_databricks_workspace.workspace, data.databricks_metastore.metastore]
+
+  depends_on = [
+    azurerm_databricks_workspace.workspace,
+    data.databricks_metastore.metastore
+  ]
 }
+

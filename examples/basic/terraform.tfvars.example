@@ -1,0 +1,17 @@
+# ========================================
+# Basic Example Configuration
+# ========================================
+# Copy this file to terraform.tfvars and fill in your values
+
+# Azure Configuration
+azure_region          = "eastus"
+azure_subscription_id = "00000000-0000-0000-0000-000000000000"
+
+# Databricks Configuration
+databricks_account_host = "https://accounts.azuredatabricks.net"
+databricks_account_id   = "00000000-0000-0000-0000-000000000000"
+databricks_metastore    = "my-metastore"
+dbfs_storage_account    = "dbfsstorageaccount"
+
+# Project Configuration
+project_name = "dbx-example"

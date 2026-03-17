@@ -1,23 +1,15 @@
-terraform {
-  required_version = ">= 1.0"
-
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">=4.31.0"
-    }
-
-    databricks = {
-      source  = "databricks/databricks"
-      version = ">=1.81.1"
-    }
-  }
-}
+# ========================================
+# Azure Provider
+# ========================================
 
 provider "azurerm" {
   subscription_id = var.azure_subscription_id
   features {}
 }
+
+# ========================================
+# Databricks Providers
+# ========================================
 
 provider "databricks" {
   alias      = "accounts"

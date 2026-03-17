@@ -1,12 +1,17 @@
+# ========================================
+# Storage Account
+# ========================================
+
 resource "azurerm_storage_account" "adls" {
-  account_replication_type = "ZRS"
-  account_tier             = "Standard"
-  location                 = var.azure_region
-  name                     = "st${replace(var.project_name, "-", "")}"
+  name                     = local.storage_account_name
   resource_group_name      = azurerm_resource_group.rg.name
+  location                 = var.azure_region
+  account_tier             = "Standard"
+  account_replication_type = "ZRS"
   is_hns_enabled           = true
   tags                     = var.tags
-  depends_on               = [azurerm_resource_group.rg]
+
+  depends_on = [azurerm_resource_group.rg]
 }
 
 resource "azurerm_storage_account_network_rules" "adls" {
@@ -23,37 +28,57 @@ resource "azurerm_storage_account_network_rules" "adls" {
   ]
 }
 
+# ========================================
+# Storage Container
+# ========================================
+
 resource "azurerm_storage_container" "data" {
   name                  = "data"
   storage_account_id    = azurerm_storage_account.adls.id
   container_access_type = "private"
-  depends_on            = [azurerm_storage_account.adls]
+
+  depends_on = [azurerm_storage_account.adls]
 }
 
+# ========================================
+# Managed Identity for Storage Access
+# ========================================
+
 resource "azurerm_user_assigned_identity" "storage" {
-  location            = var.azure_region
-  name                = "id-${var.project_name}-storage"
+  name                = local.user_assigned_identity_name
   resource_group_name = azurerm_resource_group.rg.name
+  location            = var.azure_region
   tags                = var.tags
-  depends_on          = [azurerm_resource_group.rg]
+
+  depends_on = [azurerm_resource_group.rg]
 }
 
 resource "azurerm_role_assignment" "storage_blob_contributor" {
   scope                = azurerm_storage_account.adls.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_user_assigned_identity.storage.principal_id
-  depends_on           = [azurerm_storage_account.adls, azurerm_user_assigned_identity.storage]
+
+  depends_on = [
+    azurerm_storage_account.adls,
+    azurerm_user_assigned_identity.storage
+  ]
 }
 
+# ========================================
+# Databricks Access Connector for Storage
+# ========================================
+
 resource "azurerm_databricks_access_connector" "storage" {
-  location            = var.azure_region
-  name                = "dac-${var.project_name}-storage"
+  name                = local.storage_access_connector_name
   resource_group_name = azurerm_resource_group.rg.name
+  location            = var.azure_region
   tags                = var.tags
-  depends_on          = [azurerm_user_assigned_identity.storage]
 
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.storage.id]
   }
+
+  depends_on = [azurerm_user_assigned_identity.storage]
 }
+
