@@ -13,7 +13,7 @@ variable "azure_subscription_id" {
 }
 
 # ========================================
-# Databricks Configuration Variables
+# Databricks Configuration
 # ========================================
 
 variable "databricks_account_host" {
@@ -37,19 +37,28 @@ variable "dbfs_storage_account" {
 }
 
 # ========================================
-# Network Configuration Variables
+# Network Configuration
 # ========================================
+
+variable "cidr_block" {
+  type        = string
+  description = "IP address range for the virtual network"
+}
+
+variable "private_subnets_cidr" {
+  type        = string
+  description = "IP address space allocated to the private subnet"
+}
+
+variable "public_subnets_cidr" {
+  type        = string
+  description = "IP address space allocated to the public subnet"
+}
 
 variable "allowed_ips" {
   type        = list(string)
   description = "IP addresses permitted to access storage through firewall exceptions"
   default     = []
-}
-
-variable "cidr_block" {
-  type        = string
-  description = "IP address range for the virtual network"
-  default     = "10.0.0.0/24"
 }
 
 variable "network_security_group_rules_required" {
@@ -58,20 +67,8 @@ variable "network_security_group_rules_required" {
   default     = "AllRules"
 }
 
-variable "private_subnets_cidr" {
-  type        = string
-  description = "IP address space allocated to the private subnet"
-  default     = "10.0.0.0/25"
-}
-
-variable "public_subnets_cidr" {
-  type        = string
-  description = "IP address space allocated to the public subnet"
-  default     = "10.0.0.128/25"
-}
-
 # ========================================
-# Project Configuration Variables
+# Project Configuration
 # ========================================
 
 variable "project_name" {
@@ -86,7 +83,7 @@ variable "tags" {
 }
 
 # ========================================
-# Security Configuration Variables
+# Security Configuration
 # ========================================
 
 variable "default_storage_firewall_enabled" {
@@ -98,6 +95,5 @@ variable "default_storage_firewall_enabled" {
 variable "public_network_access_enabled" {
   type        = bool
   description = "Controls whether the workspace UI is accessible from the internet"
-  default     = true
+  default     = false
 }
-

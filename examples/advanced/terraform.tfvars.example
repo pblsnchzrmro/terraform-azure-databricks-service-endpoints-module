@@ -1,0 +1,42 @@
+# ========================================
+# Advanced Example Configuration
+# ========================================
+# Copy this file to terraform.tfvars and fill in your values
+
+# Azure Configuration
+azure_region          = "westeurope"
+azure_subscription_id = "00000000-0000-0000-0000-000000000000"
+
+# Databricks Configuration
+databricks_account_host = "https://accounts.azuredatabricks.net"
+databricks_account_id   = "00000000-0000-0000-0000-000000000000"
+databricks_metastore    = "my-production-metastore"
+dbfs_storage_account    = "dbfsprodstorageacct"
+
+# Project Configuration
+project_name = "dbx-prod"
+
+# Custom Network Configuration
+cidr_block           = "10.100.0.0/23"
+private_subnets_cidr = "10.100.0.0/24"
+public_subnets_cidr  = "10.100.1.0/24"
+
+# Security Configuration - Restricted Access
+public_network_access_enabled         = false
+default_storage_firewall_enabled      = true
+network_security_group_rules_required = "AllRules"
+
+# Allowed IPs for storage access (e.g., jump hosts, CI/CD agents)
+allowed_ips = [
+  "203.0.113.0/24",
+  "198.51.100.5"
+]
+
+# Tags
+tags = {
+  Environment = "Production"
+  ManagedBy   = "Terraform"
+  CostCenter  = "Engineering"
+  Compliance  = "SOC2"
+  Example     = "Advanced"
+}
